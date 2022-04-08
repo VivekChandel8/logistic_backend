@@ -4,6 +4,9 @@ import { router } from "./routes/routes";
 import bodyParser from "body-parser";
 import { PORT } from "./config/common";
 import cors from "cors";
+import upsTrack from "./config/upsTracking";
+import cron from "node-cron"
+import { upsCronJob } from "./controllers/cron";
 
 const app = express();
 
@@ -29,9 +32,12 @@ app.use(
 
 app.use("/logistic", router);
 
-app.get("/test", (req: Request, res: Response): void => {
-  res.json({ data: "test Page" });
+cron.schedule('00 59 * * * *', () => {
+  console.log('running a task every minute');
+  upsCronJob()
 });
+
+
 
 connects();
 
