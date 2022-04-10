@@ -5,8 +5,15 @@ import bodyParser from "body-parser";
 import { PORT } from "./config/common";
 import cors from "cors";
 import upsTrack from "./config/upsTracking";
-import cron from "node-cron"
-import { upsCronJob } from "./controllers/cron";
+import cron from "node-cron";
+import { cronJobFunc } from "./controllers/cron";
+
+// import { XMLHttpRequest } from 'xmlhttprequest-ts';
+
+// var xhr = new XMLHttpRequest();
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 
@@ -32,12 +39,11 @@ app.use(
 
 app.use("/logistic", router);
 
-cron.schedule('00 59 * * * *', () => {
-  console.log('running a task every minute');
-  upsCronJob()
+cron.schedule("00 59 * * * *", () => {
+  console.log("running a task every minute");
+  cronJobFunc();
 });
-
-
+cronJobFunc();
 
 connects();
 
